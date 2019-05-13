@@ -10,7 +10,7 @@ class App extends React.Component {
   render() {
     const { isLoggedIn } = this.state;
     return (
-      <Layout isLoggedIn={isLoggedIn}>
+      <Layout>
         <Router isLoggedIn={isLoggedIn} />
       </Layout>
     );

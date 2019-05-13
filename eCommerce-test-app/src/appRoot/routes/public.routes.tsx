@@ -2,11 +2,11 @@ import React, { Fragment, Suspense, lazy, useState, useEffect } from 'react';
 import { Switch, Route } from 'react-router-dom';
 import { IPublicRoutes } from './interface';
 
-const Public = lazy(() => import('module/Public/Public'));
+const Product = lazy(() => import('module/Product/Product'));
 
 const publicRoutesList = [
   {
-    component: Public,
+    component: Product,
     exact: true,
     id: 'public-id',
     path: '/public',
@@ -20,7 +20,7 @@ const PublicRoutes: React.SFC<IPublicRoutes> = ({ isLoggedIn }) => {
       const newPath = [
         ...publicRoutes,
         {
-          component: Public,
+          component: Product,
           exact: true,
           id: 'public-id',
           path: '/',
