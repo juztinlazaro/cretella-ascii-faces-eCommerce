@@ -3,7 +3,12 @@ import React from 'react';
 const Header = () => {
   return (
     <section className="header-section">
-      <h2>header...</h2>
+      <div className="navigation-container">
+        <ul className="navigation-items">
+          <li className="nav-item">SHOP</li>
+          <li className="nav-item">COLLECTIONS</li>
+        </ul>
+      </div>
     </section>
   );
 };

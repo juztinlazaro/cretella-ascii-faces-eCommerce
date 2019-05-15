@@ -5,6 +5,7 @@ import {
   getHomeDataLoading,
 } from './actions';
 import Model from './model';
+import { onActionString } from 'common/utils';
 
 interface IHomeReducer {
   homeData: object;
@@ -14,10 +15,6 @@ interface IHomeReducer {
 interface IPayload {
   payload: object;
 }
-
-const onActionString = (action: any) => {
-  return action.toString();
-};
 
 export default handleActions<IHomeReducer, IPayload>(
   {

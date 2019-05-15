@@ -5,7 +5,7 @@ import Layout from 'components/Layout/Layout';
 
 class App extends React.Component {
   state = {
-    isLoggedIn: false,
+    isLoggedIn: true,
   };
   render() {
     const { isLoggedIn } = this.state;
