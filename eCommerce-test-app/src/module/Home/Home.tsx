@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Row from 'antd/lib/row';
 import Col from 'antd/lib/col';
+import moment from 'moment';
 import { getProductEpics } from 'store/products/actions';
 import { numberWithCommas } from 'common/utils';
 
@@ -42,7 +43,7 @@ class Home extends Component<IHomeProps, IHomeState> {
           <Row gutter={12}>
             {products.map(product => {
               return (
-                <Col key={product.id} span={8}>
+                <Col key={product.id} sm={12} lg={8} xl={6}>
                   <div className="product-card">
                     <div
                       className="face"
@@ -57,7 +58,11 @@ class Home extends Component<IHomeProps, IHomeState> {
                       <span className="price">
                         Price: {numberWithCommas(product.price)}
                       </span>
-                      <span className="date">{product.date}</span>
+                      <span className="date">
+                        {moment(product.date)
+                          .endOf('day')
+                          .fromNow()}
+                      </span>
                     </div>
                   </div>
                 </Col>

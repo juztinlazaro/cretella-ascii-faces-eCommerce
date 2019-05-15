@@ -7,7 +7,7 @@
     border: 1px solid $ash-dark;
     padding: 20px;
     margin-bottom: 20px;
-    min-height: 300px;
+    min-height: 250px;
   }
 
   .products-container .product-card .face {
@@ -16,10 +16,13 @@
     padding: 40px 0px;
     border-radius: 7px;
     min-height: 120px;
-    margin-bottom: 20px;
+    margin-bottom: 40px;
   }
 
   .products-container .product-details .price {
-    display: block;
+    float: left;
+  }
+  .products-container .product-details .date {
+    float: right;
   }
 }
