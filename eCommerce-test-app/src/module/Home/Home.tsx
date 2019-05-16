@@ -2,9 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Row from 'antd/lib/row';
 import Col from 'antd/lib/col';
-import moment from 'moment';
 import { getProductEpics } from 'store/products/actions';
-import { numberWithCommas } from 'common/utils';
+import { numberWithCommas, timeDifference } from 'common/utils';
 
 interface IHomeState {
   status: boolean;
@@ -59,9 +58,7 @@ class Home extends Component<IHomeProps, IHomeState> {
                         Price: {numberWithCommas(product.price)}
                       </span>
                       <span className="date">
-                        {moment(product.date)
-                          .endOf('day')
-                          .fromNow()}
+                        {timeDifference(product.date)}
                       </span>
                     </div>
                   </div>
