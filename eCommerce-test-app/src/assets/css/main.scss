@@ -2,8 +2,10 @@
 
 @import './global/global';
 
-@import './components/layouts';
+@import './components/filter';
 @import './components/header';
+@import './components/layouts';
+@import './components/loading';
 
-@import './modules/login';
 @import './modules/home';
+@import './modules/login';

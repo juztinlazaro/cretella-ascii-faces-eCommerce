@@ -4,21 +4,9 @@ import Row from 'antd/lib/row';
 import Col from 'antd/lib/col';
 import { getProductEpics } from 'store/products/actions';
 import { numberWithCommas, timeDifference } from 'common/utils';
-
-interface IHomeState {
-  status: boolean;
-}
-
-interface IPayload {
-  page: number;
-  limit: number;
-  sort: string;
-}
-
-interface IHomeProps {
-  getProductEpics: (payload: IPayload) => {};
-  products: any[];
-}
+import FullWidthLoading from 'components/Loading/FullWidthLoading';
+import Filter from './Filter';
+import { IHomeState, IHomeProps, IMapStateToProps } from './home.interface';
 
 class Home extends Component<IHomeProps, IHomeState> {
   state = {
@@ -34,11 +22,15 @@ class Home extends Component<IHomeProps, IHomeState> {
   }
 
   render() {
-    const { products } = this.props;
+    const { products, loading } = this.props;
 
     return (
       <section className="home-section">
         <div className="products-container">
+          {loading && <FullWidthLoading />}
+
+          <Filter />
+
           <Row gutter={12}>
             {products.map(product => {
               return (
@@ -70,13 +62,6 @@ class Home extends Component<IHomeProps, IHomeState> {
       </section>
     );
   }
-}
-
-interface IMapStateToProps {
-  products: {
-    loading: boolean;
-    products: any[];
-  };
 }
 
 const mapStateToProps = (state: IMapStateToProps) => {
