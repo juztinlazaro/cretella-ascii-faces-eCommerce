@@ -1,14 +1,15 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 import Select from 'antd/lib/select';
-import { sortBy, sort } from 'common/constant/filter.constant';
+import { sortBy } from 'common/constant/filter.constant';
 import { IFilter } from './filter.interface';
 
 const Option = Select.Option;
 
-const Filter: React.SFC<IFilter> = ({ history }) => {
+const Filter: React.SFC<IFilter> = ({ history, onChangeSort }) => {
   const handleChangeSortBy = (value: string) => {
     history.push(`/home/${value}`);
+    onChangeSort(value);
   };
 
   return (
@@ -21,14 +22,6 @@ const Filter: React.SFC<IFilter> = ({ history }) => {
         placeholder="ex. size"
       >
         {sortBy.map(item => (
-          <Option key={item.id} value={item.name}>
-            {item.name}
-          </Option>
-        ))}
-      </Select>
-
-      <Select className="sort-select" placeholder="ex. size">
-        {sort.map(item => (
           <Option key={item.id} value={item.name}>
             {item.name}
           </Option>

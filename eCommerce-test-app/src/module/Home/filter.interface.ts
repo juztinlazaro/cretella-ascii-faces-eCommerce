@@ -5,4 +5,6 @@ interface IParams {
   sort?: string;
 }
 
-export interface IFilter extends RouteComponentProps<IParams> {}
+export interface IFilter extends RouteComponentProps<IParams> {
+  onChangeSort: (sort: string) => void;
+}

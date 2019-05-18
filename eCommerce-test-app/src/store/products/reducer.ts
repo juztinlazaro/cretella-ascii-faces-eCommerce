@@ -1,11 +1,16 @@
 import { handleActions } from 'redux-actions';
 import Model from './model';
 import { onActionString } from 'common/utils';
-import { getProductSuccess, getProductLoading } from './actions';
+import {
+  getProductSuccess,
+  getProductLoading,
+  getProductInfiniteScrollLoading,
+} from './actions';
 
 interface IProductsReducer {
   products?: any[];
   loading?: boolean;
+  infiniteScrollLoading?: boolean;
 }
 
 interface IPayload {
@@ -14,14 +19,24 @@ interface IPayload {
 
 export default handleActions<IProductsReducer, IPayload>(
   {
-    [onActionString(getProductSuccess)]: (state: object, action: any) => ({
+    [onActionString(getProductSuccess)]: (
+      state: IProductsReducer,
+      action: any,
+    ) => ({
       ...state,
+      infiniteScrollLoading: false,
       loading: false,
-      products: action.payload,
+      products: [...state.products, ...action.payload],
     }),
-    [onActionString(getProductLoading)]: (state: object) => ({
+    [onActionString(getProductLoading)]: (state: IProductsReducer) => ({
       ...state,
       loading: true,
+    }),
+    [onActionString(getProductInfiniteScrollLoading)]: (
+      state: IProductsReducer,
+    ) => ({
+      ...state,
+      infiniteScrollLoading: true,
     }),
   },
   Model,

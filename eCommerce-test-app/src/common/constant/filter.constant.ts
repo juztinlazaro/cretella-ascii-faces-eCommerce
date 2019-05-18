@@ -12,14 +12,3 @@ export const sortBy = [
     name: 'id',
   },
 ];
-
-export const sort = [
-  {
-    id: 1,
-    name: 'ascending',
-  },
-  {
-    id: 2,
-    name: 'descending',
-  },
-];

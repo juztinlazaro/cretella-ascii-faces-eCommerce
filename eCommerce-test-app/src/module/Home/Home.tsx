@@ -3,33 +3,90 @@ import { connect } from 'react-redux';
 import Row from 'antd/lib/row';
 import Col from 'antd/lib/col';
 import { getProductEpics } from 'store/products/actions';
-import { numberWithCommas, timeDifference } from 'common/utils';
+import {
+  numberWithCommas,
+  onFormatRelativeDate,
+  onComputeEndScroll,
+} from 'common/utils';
 import FullWidthLoading from 'components/Loading/FullWidthLoading';
 import Filter from './Filter';
 import { IHomeState, IHomeProps, IMapStateToProps } from './home.interface';
 
 class Home extends Component<IHomeProps, IHomeState> {
   state = {
-    status: false,
+    isScrolled: false,
+    limit: 15,
+    page: 10,
   };
 
   componentDidMount() {
+    const { limit, page } = this.state;
+    const { match } = this.props;
+    const sort = match.params.sort;
+    window.addEventListener('scroll', this.handleScroll);
     this.props.getProductEpics({
-      limit: 15,
-      page: 10,
-      sort: '',
+      limit,
+      page,
+      sort,
     });
   }
 
-  render() {
-    const { products, loading } = this.props;
+  componentWillUnmount() {
+    window.removeEventListener('scroll', this.handleScroll);
+  }
 
+  handleScroll = () => {
+    const { limit, page, isScrolled } = this.state;
+    const { match } = this.props;
+    const element = document.documentElement;
+    const sort = match.params.sort;
+    const isLastAndEndScroll = onComputeEndScroll(element) && isScrolled;
+
+    this.setState(
+      {
+        isScrolled: true,
+      },
+      () => {
+        if (isLastAndEndScroll) {
+          this.setState(
+            (prevState: IHomeState) => {
+              return {
+                isScrolled: false,
+                page: prevState.page + 10,
+              };
+            },
+            () => {
+              this.props.getProductEpics({
+                infiniteScrollLoading: true,
+                limit,
+                page,
+                sort,
+              });
+            },
+          );
+        }
+      },
+    );
+  };
+
+  handleChangeSort = (sort: string) => {
+    const { limit, page } = this.state;
+
+    this.props.getProductEpics({
+      limit,
+      page,
+      sort,
+    });
+  };
+
+  render() {
+    const { products, loading, infiniteScrollLoading } = this.props;
     return (
       <section className="home-section">
         <div className="products-container">
           {loading && <FullWidthLoading />}
 
-          <Filter />
+          <Filter onChangeSort={this.handleChangeSort} />
 
           <Row gutter={12}>
             {products.map(product => {
@@ -50,7 +107,7 @@ class Home extends Component<IHomeProps, IHomeState> {
                         Price: {numberWithCommas(product.price)}
                       </span>
                       <span className="date">
-                        {timeDifference(product.date)}
+                        {onFormatRelativeDate(product.date)}
                       </span>
                     </div>
                   </div>
@@ -58,6 +115,12 @@ class Home extends Component<IHomeProps, IHomeState> {
               );
             })}
           </Row>
+
+          {infiniteScrollLoading && (
+            <div className="infinite-scroll-loading">
+              <FullWidthLoading />
+            </div>
+          )}
         </div>
       </section>
     );
@@ -66,6 +129,7 @@ class Home extends Component<IHomeProps, IHomeState> {
 
 const mapStateToProps = (state: IMapStateToProps) => {
   return {
+    infiniteScrollLoading: state.products.infiniteScrollLoading,
     loading: state.products.loading,
     products: state.products.products,
   };

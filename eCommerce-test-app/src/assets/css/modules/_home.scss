@@ -25,7 +25,14 @@
   .products-container .product-details .price {
     float: left;
   }
+
   .products-container .product-details .date {
     float: right;
+  }
+
+  .infinite-scroll-loading {
+    position: relative;
+    height: 40px;
+    width: 100%;
   }
 }

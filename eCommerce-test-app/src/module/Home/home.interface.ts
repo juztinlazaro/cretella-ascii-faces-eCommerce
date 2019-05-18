@@ -1,22 +1,32 @@
 export interface IHomeState {
-  status: boolean;
+  isScrolled: boolean;
+  limit: number;
+  page: number;
 }
 
-export interface IPayload {
-  page: number;
-  limit: number;
-  sort: string;
+export interface IGetProductsEpicsPayload {
+  page?: number;
+  limit?: number;
+  sort?: string;
+  infiniteScrollLoading?: boolean;
 }
 
 export interface IHomeProps {
-  getProductEpics: (payload: IPayload) => {};
+  getProductEpics: (payload: IGetProductsEpicsPayload) => {};
   products: any[];
   loading: boolean;
+  infiniteScrollLoading: boolean;
+  match: {
+    params: {
+      sort?: string;
+    };
+  };
 }
 
 export interface IMapStateToProps {
   products: {
-    loading: boolean;
+    infiniteScrollLoading: boolean;
     products: any[];
+    loading: boolean;
   };
 }

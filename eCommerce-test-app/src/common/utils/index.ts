@@ -10,7 +10,7 @@ export const numberWithCommas = (value: number) => {
   return `$${toDecimal.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
 };
 
-export const timeDifference = (previous: string) => {
+export const onFormatRelativeDate = (previous: string) => {
   const current: any = new Date();
   const date = Date.parse(previous);
   const msPerMinute = 60 * 1000;
@@ -20,6 +20,7 @@ export const timeDifference = (previous: string) => {
 
   const elapsed = current - date;
   const days = Math.round(elapsed / msPerDay);
+
   if (elapsed < msPerMinute) {
     return Math.round(elapsed / 1000) + ' seconds ago';
   } else if (elapsed < msPerHour) {
@@ -29,9 +30,19 @@ export const timeDifference = (previous: string) => {
   } else if (elapsed < msPerMonth && days < 7) {
     return Math.round(elapsed / msPerDay) + ' days ago';
   } else {
-    const dateFormated = `${new Date(date).getMonth()}/
-    ${new Date(date).getDate()}/
-    ${new Date(date).getFullYear()}`;
+    const dateFormat = new Date(date).getDate();
+    const dateMonth = new Date(date).getMonth();
+    const dateYear = new Date(date).getFullYear();
+    const dateFormated = `${dateMonth}/${dateFormat}/${dateYear}`;
     return dateFormated;
   }
+};
+
+export const onComputeEndScroll = (element: any) => {
+  const height = element.scrollHeight;
+  const container = element.clientHeight;
+  const position = element.scrollTop;
+  const finalHeight = height - container;
+
+  return finalHeight <= Math.ceil(position);
 };

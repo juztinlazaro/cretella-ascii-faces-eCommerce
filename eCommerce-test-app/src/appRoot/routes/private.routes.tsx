@@ -16,7 +16,7 @@ const privateRoutesList = [
     component: Home,
     exact: true,
     id: 'home-id',
-    path: '/home',
+    path: '/home/:sort?',
   },
 ];
 
@@ -30,7 +30,7 @@ const PrivateRoutes: React.SFC<IPublicRoutes> = ({ isLoggedIn }) => {
           component: Home,
           exact: true,
           id: 'home-id',
-          path: '/:sortby/:sort',
+          path: '/:sort?',
         },
       ];
       setRootPath(newPath);
