@@ -18,8 +18,10 @@
     border: 1px solid;
     padding: 40px 0px;
     border-radius: 7px;
-    min-height: 120px;
     margin-bottom: 40px;
+    min-height: 150px;
+    max-height: 150px;
+    overflow: hidden;
   }
 
   .products-container .product-details .price {
