@@ -84,7 +84,7 @@ class Home extends Component<IHomeProps, IHomeState> {
     return (
       <section className="home-section">
         <div className="products-container">
-          {loading && <FullWidthLoading />}
+          {loading && <FullWidthLoading isFixed={true} />}
 
           <Filter onChangeSort={this.handleChangeSort} />
 
