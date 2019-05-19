@@ -16,6 +16,7 @@ export interface IHomeProps {
   products: any[];
   loading: boolean;
   infiniteScrollLoading: boolean;
+  isNoData?: boolean;
   match: {
     params: {
       sort?: string;
@@ -26,6 +27,7 @@ export interface IHomeProps {
 export interface IMapStateToProps {
   products: {
     infiniteScrollLoading: boolean;
+    isNoData: boolean;
     products: any[];
     loading: boolean;
   };

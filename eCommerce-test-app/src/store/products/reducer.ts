@@ -11,6 +11,7 @@ interface IProductsReducer {
   products?: any[];
   loading?: boolean;
   infiniteScrollLoading?: boolean;
+  isNoData?: boolean;
 }
 
 interface IPayload {
@@ -22,14 +23,21 @@ export default handleActions<IProductsReducer, IPayload>(
     [onActionString(getProductSuccess)]: (
       state: IProductsReducer,
       action: any,
-    ) => ({
-      ...state,
-      infiniteScrollLoading: false,
-      loading: false,
-      products: [...state.products, ...action.payload],
-    }),
+    ) => {
+      const products = action.payload;
+      const isCheckNoData = products.length === 0;
+
+      return {
+        ...state,
+        infiniteScrollLoading: false,
+        isNoData: isCheckNoData,
+        loading: false,
+        products: [...state.products, ...products],
+      };
+    },
     [onActionString(getProductLoading)]: (state: IProductsReducer) => ({
       ...state,
+      isNoData: false,
       loading: true,
     }),
     [onActionString(getProductInfiniteScrollLoading)]: (
@@ -37,6 +45,7 @@ export default handleActions<IProductsReducer, IPayload>(
     ) => ({
       ...state,
       infiniteScrollLoading: true,
+      isNoData: false,
     }),
   },
   Model,

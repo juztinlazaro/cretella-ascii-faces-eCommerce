@@ -17,3 +17,7 @@
 1. Go to `rootFolder/eCommerce-test-app`.
 2. run command in terminal `npm start`
 3. Please read the frontend readme.
+
+### Frontend Info
+
+1. Idle time 10 seconds if you want to over ride it go to `src/common/constant/global.constant`

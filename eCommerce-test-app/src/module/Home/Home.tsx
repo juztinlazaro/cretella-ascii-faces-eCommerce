@@ -10,14 +10,20 @@ import {
 } from 'common/utils';
 import FullWidthLoading from 'components/Loading/FullWidthLoading';
 import IdleDetector from 'components/IdleDetector/IdleDetector';
+import {
+  IDLE_TIME,
+  PRODUCT_FIRST_PAGE,
+  PRODUCT_DATA_LIMIT,
+} from 'common/constant/defaults.constant';
+
 import Filter from './Filter';
 import { IHomeState, IHomeProps, IMapStateToProps } from './home.interface';
 
 class Home extends Component<IHomeProps, IHomeState> {
   state = {
     isScrolled: false,
-    limit: 15,
-    page: 10,
+    limit: PRODUCT_DATA_LIMIT,
+    page: PRODUCT_FIRST_PAGE,
   };
 
   componentDidMount() {
@@ -30,45 +36,42 @@ class Home extends Component<IHomeProps, IHomeState> {
       sort,
     });
 
-    window.addEventListener('scroll', this.handleScroll);
+    window.addEventListener('scroll', this.handleScrollDOM);
   }
 
   componentWillUnmount() {
-    window.removeEventListener('scroll', this.handleScroll);
+    window.removeEventListener('scroll', this.handleScrollDOM);
   }
 
-  handleScroll = () => {
+  handleScrollDOM = () => {
     const { limit, page, isScrolled } = this.state;
     const { match } = this.props;
     const element = document.documentElement;
     const sort = match.params.sort;
     const isLastAndEndScroll = onComputeEndScroll(element) && isScrolled;
 
-    this.setState(
-      {
+    if (isLastAndEndScroll) {
+      this.setState(
+        (prevState: IHomeState) => {
+          return {
+            isScrolled: false,
+            page: prevState.page + 1,
+          };
+        },
+        () => {
+          this.props.getProductEpics({
+            infiniteScrollLoading: true,
+            limit,
+            page,
+            sort,
+          });
+        },
+      );
+    } else {
+      this.setState({
         isScrolled: true,
-      },
-      () => {
-        if (isLastAndEndScroll) {
-          this.setState(
-            (prevState: IHomeState) => {
-              return {
-                isScrolled: false,
-                page: prevState.page + 1,
-              };
-            },
-            () => {
-              this.props.getProductEpics({
-                infiniteScrollLoading: true,
-                limit,
-                page,
-                sort,
-              });
-            },
-          );
-        }
-      },
-    );
+      });
+    }
   };
 
   handleIdleGetProducts = () => {
@@ -103,7 +106,7 @@ class Home extends Component<IHomeProps, IHomeState> {
   };
 
   render() {
-    const { products, loading, infiniteScrollLoading } = this.props;
+    const { products, loading, infiniteScrollLoading, isNoData } = this.props;
     return (
       <section className="home-section">
         <div className="products-container">
@@ -146,7 +149,12 @@ class Home extends Component<IHomeProps, IHomeState> {
             </div>
           )}
 
-          <IdleDetector idleTime={5000} onIdle={this.handleIdleGetProducts} />
+          {isNoData && <h4 className="_text-center">~ end of catalogue~</h4>}
+
+          <IdleDetector
+            idleTime={IDLE_TIME}
+            onIdle={this.handleIdleGetProducts}
+          />
         </div>
       </section>
     );
@@ -156,6 +164,7 @@ class Home extends Component<IHomeProps, IHomeState> {
 const mapStateToProps = (state: IMapStateToProps) => {
   return {
     infiniteScrollLoading: state.products.infiniteScrollLoading,
+    isNoData: state.products.isNoData,
     loading: state.products.loading,
     products: state.products.products,
   };
