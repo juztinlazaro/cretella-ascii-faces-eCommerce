@@ -20,26 +20,18 @@ class IdleDetector extends Component<IIdleDetectorprops, {}> {
     if (this.props.onAction) {
       this.props.onAction();
     }
-
-    console.log('user did Something', e);
   };
 
   onActive = (e: any) => {
     if (this.props.onActive) {
       this.props.onActive();
     }
-
-    console.log('user is ACTIVE', e);
-    console.log('time remaining', this.idleTimerRef.getRemainingTime());
   };
 
   onIdle = (e: any) => {
     if (this.props.onIdle) {
       this.props.onIdle();
     }
-
-    console.log('user is IDLE', e);
-    console.log('USER last active', this.idleTimerRef.getLastActiveTime());
   };
 
   handleGetRef = (ref: any) => {
