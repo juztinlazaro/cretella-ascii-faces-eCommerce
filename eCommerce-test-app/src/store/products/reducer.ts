@@ -6,6 +6,7 @@ import {
   getProductLoading,
   getProductInfiniteScrollLoading,
 } from './actions';
+import { onInsertAD } from './helper';
 
 interface IProductsReducer {
   products?: any[];
@@ -25,14 +26,14 @@ export default handleActions<IProductsReducer, IPayload>(
       action: any,
     ) => {
       const products = action.payload;
+      const totalProducts = [...state.products, ...products];
       const isCheckNoData = products.length === 0;
-
       return {
         ...state,
         infiniteScrollLoading: false,
         isNoData: isCheckNoData,
         loading: false,
-        products: [...state.products, ...products],
+        products: onInsertAD(totalProducts),
       };
     },
     [onActionString(getProductLoading)]: (state: IProductsReducer) => ({

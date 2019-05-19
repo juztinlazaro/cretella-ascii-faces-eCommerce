@@ -107,6 +107,7 @@ class Home extends Component<IHomeProps, IHomeState> {
 
   render() {
     const { products, loading, infiniteScrollLoading, isNoData } = this.props;
+
     return (
       <section className="home-section">
         <div className="products-container">
