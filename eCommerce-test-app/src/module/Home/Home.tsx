@@ -9,6 +9,7 @@ import {
   onComputeEndScroll,
 } from 'common/utils';
 import FullWidthLoading from 'components/Loading/FullWidthLoading';
+import IdleDetector from 'components/IdleDetector/IdleDetector';
 import Filter from './Filter';
 import { IHomeState, IHomeProps, IMapStateToProps } from './home.interface';
 
@@ -23,12 +24,13 @@ class Home extends Component<IHomeProps, IHomeState> {
     const { limit, page } = this.state;
     const { match } = this.props;
     const sort = match.params.sort;
-    window.addEventListener('scroll', this.handleScroll);
     this.props.getProductEpics({
       limit,
       page,
       sort,
     });
+
+    window.addEventListener('scroll', this.handleScroll);
   }
 
   componentWillUnmount() {
@@ -52,7 +54,7 @@ class Home extends Component<IHomeProps, IHomeState> {
             (prevState: IHomeState) => {
               return {
                 isScrolled: false,
-                page: prevState.page + 10,
+                page: prevState.page + 1,
               };
             },
             () => {
@@ -65,6 +67,27 @@ class Home extends Component<IHomeProps, IHomeState> {
             },
           );
         }
+      },
+    );
+  };
+
+  handleIdleGetProducts = () => {
+    const { limit, page } = this.state;
+    const { match } = this.props;
+    const sort = match.params.sort;
+
+    this.setState(
+      prevState => {
+        return {
+          page: prevState.page + 1,
+        };
+      },
+      () => {
+        this.props.getProductEpics({
+          limit,
+          page,
+          sort,
+        });
       },
     );
   };
@@ -106,6 +129,7 @@ class Home extends Component<IHomeProps, IHomeState> {
                       <span className="price">
                         Price: {numberWithCommas(product.price)}
                       </span>
+
                       <span className="date">
                         {onFormatRelativeDate(product.date)}
                       </span>
@@ -121,6 +145,8 @@ class Home extends Component<IHomeProps, IHomeState> {
               <FullWidthLoading />
             </div>
           )}
+
+          <IdleDetector idleTime={5000} onIdle={this.handleIdleGetProducts} />
         </div>
       </section>
     );
